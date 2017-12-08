@@ -51,7 +51,7 @@ public class Chess {
 		}
 		scan.close();
 		
-		
+
 	}
 	
 	/**

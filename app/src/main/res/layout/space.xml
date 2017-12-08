@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/space"
+    android:layout_width="48dp"
+    android:layout_height="48dp"
+    android:background="#ffffff">
+
+    <ImageView
+        android:id="@+id/spaceBackground"
+        android:layout_width="48dp"
+        android:layout_height="48dp" />
+
+    <ImageView
+        android:id="@+id/piece"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+</android.support.constraint.FrameLayout>
