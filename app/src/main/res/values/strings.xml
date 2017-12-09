@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Android08-chess</string>
+    <string name="undo">Undo</string>
+    <string name="sort_by_date">Sort by Date</string>
+    <string name="sort_by_title">sort by title</string>
+    <string name="play_replay">play replay</string>
+    <string name="offer_draw">Offer draw</string>
+    <string name="resign">Resign</string>
+    <string name="view_replays">View Replays</string>
+    <string name="let_ai_choose">Let AI Choose</string>
+    <string name="drawAccept">Accept draw</string>
+    <string name="go_back">go back</string>
 </resources>
