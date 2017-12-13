@@ -1,14 +1,22 @@
 package com.example.jholl.android08_chess;
 
+import android.content.ClipData;
 import android.content.Context;
+import android.content.Intent;
+import android.support.constraint.ConstraintLayout;
 import android.text.Layout;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import chess.Board;
 import chess.Space;
@@ -24,6 +32,9 @@ public class SpaceAdapter extends BaseAdapter {
 
     private Context mContext;
     chess.Board board;
+    public static boolean firstSpace = false;
+    public static String move[] = new String[2];
+    public static String chars = "abcdefgh";
 
     public SpaceAdapter (Context context, Board board){
         this.mContext = context;
@@ -42,16 +53,16 @@ public class SpaceAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int i) {
-        return 0;
+        return i;
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup parent) {
+    public View getView(int i, View view, final ViewGroup parent) {
 
         if(view == null){
             LayoutInflater inflater = LayoutInflater.from(mContext);
 
-            View gridView = inflater.inflate(R.layout.space, parent, false);
+            final View gridView = inflater.inflate(R.layout.space, parent, false);
 
             ImageView spaceImage = gridView.findViewById(R.id.spaceBackground);
 
@@ -59,17 +70,17 @@ public class SpaceAdapter extends BaseAdapter {
             Integer x, y;
             x = (i%8);
             y = (i/8);
-            Space thisSpace = board.Spaces[x][y];
+            final Space thisSpace = board.Spaces[x][y];
 
             if ((y%2==1 && x%2==1) || (x%2==0 && y%2==0))
                 spaceImage.setImageResource(R.drawable.whitesquare);
             else
                 spaceImage.setImageResource(R.drawable.blacksquare);
 
-            ImageButton piece = gridView.findViewById(R.id.piece);
+            final ImageButton piece = gridView.findViewById(R.id.piece);
 
             if(thisSpace.isOccupied()){
-                if(thisSpace.getPiece().getWhite() == true){
+                if(thisSpace.getPiece().getWhite()){
                     if(thisSpace.getPiece().getname().equalsIgnoreCase("Bishop"))
                         piece.setImageResource(R.drawable.whitebishop);
                     if(thisSpace.getPiece().getname().equalsIgnoreCase("King"))
@@ -105,11 +116,15 @@ public class SpaceAdapter extends BaseAdapter {
 
             }
 
+            piece.setTag(i);
+            spaceImage.setTag(i);
+
             if(!thisSpace.isOccupied())
                 piece.setVisibility(View.GONE);
 
-            //TODO implement piece imagebuttons listener
-            //I believe this can be done pretty easily since this code goes through every space
+            piece.setOnTouchListener(new MyTouchListener());
+            spaceImage.setOnTouchListener(new MyTouchListener());
+
 
             return gridView;
         }
@@ -117,5 +132,34 @@ public class SpaceAdapter extends BaseAdapter {
             return view;
 
 
+    }
+}
+
+final class MyTouchListener implements View.OnTouchListener {
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        view.performClick();
+        if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+            if(!SpaceAdapter.firstSpace) {
+                SpaceAdapter.firstSpace = true;
+                SpaceAdapter.move[0]="";
+                SpaceAdapter.move[0] = SpaceAdapter.move[0] + (SpaceAdapter.chars.charAt((int)view.getTag() % 8));
+                SpaceAdapter.move[0].concat(Integer.toString(7-(int)view.getTag() / 8));
+            }
+            else{
+                SpaceAdapter.firstSpace = false;
+                SpaceAdapter.move[1]="";
+                SpaceAdapter.move[1] = SpaceAdapter.move[1] + (SpaceAdapter.chars.charAt((int)view.getTag() % 8));
+                SpaceAdapter.move[1].concat(Integer.toString(7-(int)view.getTag() / 8));
+
+                //this line calls board.move with the first argument being the same as in the first chess assignment
+                GameActivity.backendBoard.move(SpaceAdapter.move,GameActivity.currentplayer);
+                view.findViewById(R.id.Board).invalidate(); //TODO This should refresh board but might not
+                //we'll have to play with refreshing view after you implement the game's moves in this context
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 }

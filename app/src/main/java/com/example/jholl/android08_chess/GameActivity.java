@@ -13,6 +13,9 @@ import chess.Board;
 
 public class GameActivity extends AppCompatActivity {
 
+    public static Board backendBoard = new Board();
+    public static String currentplayer = "White";
+
     //this method will be called first
     //384x640 screen (use dp for everything except text, text uses sp, ex: 12dp or 12sp)
 
@@ -20,7 +23,6 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game);
-        Board backendBoard = new Board();
 
         GridView board = findViewById(R.id.Board);
 
