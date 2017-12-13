@@ -2,8 +2,10 @@ package com.example.jholl.android08_chess;
 
 import android.content.ClipData;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
+import android.support.v7.app.AlertDialog;
 import android.text.Layout;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
@@ -22,6 +24,7 @@ import chess.Board;
 import chess.Space;
 import pieces.Piece;
 
+import static com.example.jholl.android08_chess.GameActivity.currentplayer;
 import static com.example.jholl.android08_chess.SpaceAdapter.gridView;
 
 
@@ -63,6 +66,20 @@ public class SpaceAdapter extends BaseAdapter {
     public View getView(int i, View view, final ViewGroup parent) {
 
         if(view == null){
+            if (!GameActivity.backendBoard.getgame()){
+                AlertDialog.Builder builder2 = new AlertDialog.Builder(view.getContext());
+                if(currentplayer.equalsIgnoreCase("White")) {
+                    builder2.setMessage("White wins! Would you like to save replay?").setPositiveButton("Yes", askReplaySave)
+                            .setNegativeButton("No", askReplaySave);
+                    builder2.show();
+                }
+                else{
+                    builder2.setMessage("Black wins! Would you like to save replay?").setPositiveButton("Yes", askReplaySave)
+                            .setNegativeButton("No", askReplaySave);
+                    builder2.show();
+                }
+            }
+
             LayoutInflater inflater = LayoutInflater.from(mContext);
 
             gridView = inflater.inflate(R.layout.space, parent, false);
@@ -136,6 +153,23 @@ public class SpaceAdapter extends BaseAdapter {
 
 
     }
+    DialogInterface.OnClickListener askReplaySave = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which){
+                case DialogInterface.BUTTON_POSITIVE:
+                    //TODO save replay
+                    GameActivity.backendBoard = new Board();
+                    GameActivity.board.setAdapter(new SpaceAdapter(GameActivity.board.getContext(), GameActivity.backendBoard));
+                    break;
+
+                case DialogInterface.BUTTON_NEGATIVE:
+                    GameActivity.backendBoard = new Board();
+                    GameActivity.board.setAdapter(new SpaceAdapter(GameActivity.board.getContext(), GameActivity.backendBoard));
+                    break;
+            }
+        }
+    };
 }
 
 final class MyTouchListener implements View.OnTouchListener {
@@ -156,15 +190,15 @@ final class MyTouchListener implements View.OnTouchListener {
                 SpaceAdapter.move[1] = SpaceAdapter.move[1] + (SpaceAdapter.chars.charAt((int)view.getTag() % 8));
                 SpaceAdapter.move[1]+=(8-(int)view.getTag() / 8);
 
-                if (!GameActivity.backendBoard.move (SpaceAdapter.move,GameActivity.currentplayer)){
+                if (!GameActivity.backendBoard.move (SpaceAdapter.move, currentplayer)){
                     Toast.makeText(SpaceAdapter.gridView.getContext(), "Illegal move, try again.", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    if (GameActivity.currentplayer.equals ("White")){
-                        GameActivity.currentplayer="Black";
+                    if (currentplayer.equals ("White")){
+                        currentplayer="Black";
                     }
                     else {
-                        GameActivity.currentplayer= "White";
+                        currentplayer= "White";
                     }
                 }
                 //System.out.println(SpaceAdapter.move[0] + SpaceAdapter.move[1]);

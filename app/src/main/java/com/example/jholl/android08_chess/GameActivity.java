@@ -1,6 +1,8 @@
 package com.example.jholl.android08_chess;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -44,11 +46,10 @@ public class GameActivity extends AppCompatActivity {
         draw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                draw.setText(R.string.drawAccept);
-                /*
-                TODO draw code goes here (try to make it only work after the button's pressed the second time
-                but if that's difficult, just change the text in the button to "draw" and remove the setText line above.
-                */
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setMessage("Your opponent has offered a draw, do you accept?").setPositiveButton("Yes", drawClickListener)
+                        .setNegativeButton("No",drawClickListener);
+                builder.show();
             }
         });
 
@@ -56,7 +57,10 @@ public class GameActivity extends AppCompatActivity {
         resign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO resign code goes here
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setMessage("Are you sure you want to resign?").setPositiveButton("Yes", resignClickListener)
+                        .setNegativeButton("No",resignClickListener);
+                builder.show();
             }
         });
 
@@ -79,5 +83,69 @@ public class GameActivity extends AppCompatActivity {
 
 
     }
+    DialogInterface.OnClickListener drawClickListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which){
+                case DialogInterface.BUTTON_POSITIVE:
+                    String draws[] = new String[1];
+                    draws[0] = "draw";
+                    backendBoard.move(draws, currentplayer);
+                    AlertDialog.Builder builder2 = new AlertDialog.Builder(board.getContext());
+                    builder2.setMessage("Draw! Would you like to save replay?").setPositiveButton("Yes", askReplaySave)
+                            .setNegativeButton("No",askReplaySave);
+                    builder2.show();
+                    break;
+
+                case DialogInterface.BUTTON_NEGATIVE:
+                    break;
+            }
+        }
+    };
+
+    DialogInterface.OnClickListener resignClickListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which){
+                case DialogInterface.BUTTON_POSITIVE:
+                    String resign[] = new String[1];
+                    resign[0] = "resign";
+                    backendBoard.move(resign, currentplayer);
+                        AlertDialog.Builder builder2 = new AlertDialog.Builder(board.getContext());
+                        if(currentplayer.equalsIgnoreCase("White")) {
+                            builder2.setMessage("White wins! Would you like to save replay?").setPositiveButton("Yes", askReplaySave)
+                                    .setNegativeButton("No", askReplaySave);
+                            builder2.show();
+                        }
+                        else{
+                            builder2.setMessage("Black wins! Would you like to save replay?").setPositiveButton("Yes", askReplaySave)
+                                    .setNegativeButton("No", askReplaySave);
+                            builder2.show();
+                    }
+                    break;
+
+                case DialogInterface.BUTTON_NEGATIVE:
+                    break;
+            }
+        }
+    };
+    DialogInterface.OnClickListener askReplaySave = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which){
+                case DialogInterface.BUTTON_POSITIVE:
+                    //TODO save replay
+                    backendBoard = new Board();
+                    board.setAdapter(new SpaceAdapter(board.getContext(), GameActivity.backendBoard));
+                    break;
+
+                case DialogInterface.BUTTON_NEGATIVE:
+                    backendBoard = new Board();
+                    board.setAdapter(new SpaceAdapter(board.getContext(), GameActivity.backendBoard));
+                    break;
+            }
+        }
+    };
 }
+
 
