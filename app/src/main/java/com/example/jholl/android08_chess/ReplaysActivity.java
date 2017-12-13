@@ -4,7 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+
+import java.util.*;
 
 /**
  * Created by Jason Holley on 12/9/2017.
@@ -31,6 +36,15 @@ public class ReplaysActivity extends AppCompatActivity {
         ListView theListView = (ListView) findViewById(R.id.replayListView);
         theListView.setAdapter(theAdapter);
         */
+
+        DataBase db = DataBase.getInstance(ReplaysActivity.this);
+        List<DataBaseInfo> content  = db.getAll();
+
+        ListAdapter theAdapter = new ArrayAdapter<>
+                (this, android.R.layout.simple_list_item_1, content);
+
+        ListView theListView = findViewById(R.id.replayListView);
+        theListView.setAdapter(theAdapter);
 
         Button back = this.findViewById(R.id.backButton);
         back.setOnClickListener(new View.OnClickListener() {

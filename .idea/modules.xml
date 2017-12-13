@@ -2,10 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Android08chess.iml" filepath="$PROJECT_DIR$/Android08chess.iml" />
+      <module fileurl="file://C:\Users\Rituraj\android08-chess\Android08chess.iml" filepath="C:\Users\Rituraj\android08-chess\Android08chess.iml" />
       <module fileurl="file://C:\Users\Rituraj\master\Android08chess.iml" filepath="C:\Users\Rituraj\master\Android08chess.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android08-chess.iml" filepath="$PROJECT_DIR$/android08-chess.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://C:\Users\Rituraj\master\app\app.iml" filepath="C:\Users\Rituraj\master\app\app.iml" />
+      <module fileurl="file://C:\Users\Rituraj\android08-chess\app\app.iml" filepath="C:\Users\Rituraj\android08-chess\app\app.iml" />
       <module fileurl="file://C:\Users\jholl\AndroidStudioProjects\Android08chess\master.iml" filepath="C:\Users\jholl\AndroidStudioProjects\Android08chess\master.iml" />
     </modules>
   </component>
