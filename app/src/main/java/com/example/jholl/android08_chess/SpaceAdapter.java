@@ -148,6 +148,7 @@ final class MyTouchListener implements View.OnTouchListener {
                 SpaceAdapter.move[0]="";
                 SpaceAdapter.move[0] = SpaceAdapter.move[0] + (SpaceAdapter.chars.charAt((int)view.getTag() % 8));
                 SpaceAdapter.move[0] +=(8-(int)view.getTag() / 8);
+                view.setBackgroundResource(R.drawable.highlighted);
             }
             else{
                 SpaceAdapter.firstSpace = false;
@@ -156,7 +157,7 @@ final class MyTouchListener implements View.OnTouchListener {
                 SpaceAdapter.move[1]+=(8-(int)view.getTag() / 8);
 
                 if (!GameActivity.backendBoard.move (SpaceAdapter.move,GameActivity.currentplayer)){
-                //TODO popup for illegal move
+                    Toast.makeText(SpaceAdapter.gridView.getContext(), "Illegal move, try again.", Toast.LENGTH_SHORT).show();
                 }
                 else {
                     if (GameActivity.currentplayer.equals ("White")){
