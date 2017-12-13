@@ -22,6 +22,8 @@ import chess.Board;
 import chess.Space;
 import pieces.Piece;
 
+import static android.support.v4.content.ContextCompat.startActivity;
+
 
 /**
  * Created by Jason Holley on 12/7/2017.
@@ -144,16 +146,18 @@ final class MyTouchListener implements View.OnTouchListener {
                 SpaceAdapter.firstSpace = true;
                 SpaceAdapter.move[0]="";
                 SpaceAdapter.move[0] = SpaceAdapter.move[0] + (SpaceAdapter.chars.charAt((int)view.getTag() % 8));
-                SpaceAdapter.move[0].concat(Integer.toString(7-(int)view.getTag() / 8));
+                SpaceAdapter.move[0]+=(8-(int)view.getTag() / 8);
             }
             else{
                 SpaceAdapter.firstSpace = false;
                 SpaceAdapter.move[1]="";
                 SpaceAdapter.move[1] = SpaceAdapter.move[1] + (SpaceAdapter.chars.charAt((int)view.getTag() % 8));
-                SpaceAdapter.move[1].concat(Integer.toString(7-(int)view.getTag() / 8));
+                SpaceAdapter.move[1]+=(8-(int)view.getTag() / 8);
 
                 //this line calls board.move with the first argument being the same as in the first chess assignment
                 GameActivity.backendBoard.move(SpaceAdapter.move,GameActivity.currentplayer);
+
+
                 view.findViewById(R.id.Board).invalidate(); //TODO This should refresh board but might not
                 //we'll have to play with refreshing view after you implement the game's moves in this context
             }
