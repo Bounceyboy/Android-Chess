@@ -26,6 +26,7 @@ import pieces.Piece;
 
 import static com.example.jholl.android08_chess.GameActivity.currentplayer;
 import static com.example.jholl.android08_chess.SpaceAdapter.gridView;
+import static com.example.jholl.android08_chess.SpaceAdapter.moves;
 
 
 /**
@@ -34,7 +35,8 @@ import static com.example.jholl.android08_chess.SpaceAdapter.gridView;
 
 public class SpaceAdapter extends BaseAdapter {
 
-
+    public static String moves = new String();
+    public static String simulateMoves = new String();
     private Context mContext;
     chess.Board board;
     public static boolean firstSpace = false;
@@ -194,6 +196,9 @@ final class MyTouchListener implements View.OnTouchListener {
                     Toast.makeText(SpaceAdapter.gridView.getContext(), "Illegal move, try again.", Toast.LENGTH_SHORT).show();
                 }
                 else {
+                    moves+=(SpaceAdapter.move[0]);
+                    moves+=(SpaceAdapter.move[1]);
+                    GameActivity.simulatecount+=4;
                     if (currentplayer.equals ("White")){
                         currentplayer="Black";
                     }

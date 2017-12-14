@@ -8,14 +8,20 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import chess.Board;
 
 public class GameActivity extends AppCompatActivity {
-
+    public static int simulatecount=0;
+    EditText title;
     public static Board backendBoard = new Board();
     public static String currentplayer = "Black";
     public static GridView board;
@@ -34,6 +40,35 @@ public class GameActivity extends AppCompatActivity {
 
         board.setAdapter(adapter);
 
+        final Button simulate = this.findViewById(R.id.simulate);
+        simulate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (simulatecount + 4 < SpaceAdapter.simulateMoves.length()) {
+                    String[] playmove = {SpaceAdapter.simulateMoves.substring(simulatecount, simulatecount + 2),
+                            SpaceAdapter.simulateMoves.substring(simulatecount + 2, simulatecount + 4)};
+                    System.out.println(playmove[0] + " " + playmove[1]);
+                    if (!GameActivity.backendBoard.move(playmove, currentplayer)) {
+                        Toast.makeText(SpaceAdapter.gridView.getContext(), "Illegal move, try again.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        SpaceAdapter.moves += (playmove[0]);
+                        SpaceAdapter.moves += (playmove[1]);
+                        simulatecount += 4;
+                        if (currentplayer.equals("White")) {
+                            currentplayer = "Black";
+                        } else {
+                            currentplayer = "White";
+                        }
+                    }
+                    //System.out.println(SpaceAdapter.move[0] + SpaceAdapter.move[1]);
+                    GameActivity.board.setAdapter(new SpaceAdapter(view.getContext(), GameActivity.backendBoard));
+                }
+            }
+        });
+
+        if(SpaceAdapter.simulateMoves.length()>0){
+            simulate.setVisibility(View.VISIBLE);
+        }
         Button undo = this.findViewById(R.id.undoButton);
         undo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,12 +170,34 @@ public class GameActivity extends AppCompatActivity {
             switch (which){
                 case DialogInterface.BUTTON_POSITIVE:
                     //TODO save replay
+                    final AlertDialog.Builder input = new AlertDialog.Builder(board.getContext());
+                    input.setMessage("Title of Game?");
+                    title = new EditText(board.getContext());
+                    input.setView(title);
+                    input.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            String name=title.getText().toString();
+                            Date curr = Calendar.getInstance().getTime();
+                            SimpleDateFormat format = new SimpleDateFormat("ddMMyyyy");
+                            String date =format.format(curr);
+                            DataBaseInfo newgame = new DataBaseInfo(name,date,SpaceAdapter.moves);
+                            DataBase db = DataBase.getInstance(GameActivity.this);
+                            db.add(newgame);
+
+                        }
+                    });
+
+                    AlertDialog ask = input.create();
+                    ask.show();
                     backendBoard = new Board();
+                    currentplayer="Black";
                     board.setAdapter(new SpaceAdapter(board.getContext(), GameActivity.backendBoard));
                     break;
 
                 case DialogInterface.BUTTON_NEGATIVE:
                     backendBoard = new Board();
+                    currentplayer="Black";
                     board.setAdapter(new SpaceAdapter(board.getContext(), GameActivity.backendBoard));
                     break;
             }

@@ -68,4 +68,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/undoButton" />
 
+    <Button
+        android:id="@+id/simulate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="12dp"
+        android:text="Play"
+        android:visibility="invisible"
+        app:layout_constraintStart_toEndOf="@+id/aiButton"
+        app:layout_constraintTop_toBottomOf="@+id/drawButton"/>
+
 </android.support.constraint.ConstraintLayout>

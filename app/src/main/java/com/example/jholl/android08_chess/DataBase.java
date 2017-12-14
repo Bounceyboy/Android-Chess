@@ -48,7 +48,7 @@ public class DataBase extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_CONTACTS + "("
                 + GAME_TITLE + " TEXT," + GAME_DATE + " TEXT,"
-                + MOVES + " TEXT," + ")";
+                + MOVES + " TEXT" + ")";
         db.execSQL(CREATE_CONTACTS_TABLE);
     }
 
